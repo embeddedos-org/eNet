@@ -6,7 +6,7 @@ Networking subsystem for the EmbeddedOS platform — link technologies, protocol
 `net/`.** Not here.
 
 Under §28 of the master design, *Implemented* means "feature exists and is
-usable", evidenced by code and functional tests. eNet meets that: 25 public
+usable", evidenced by code and functional tests. eNet meets that: 26 public
 functions in `net/include/eos/net.h`, a POSIX backend in `net/src/net_posix.c`,
 and `test_net` passing in the eos suite. What it does not have is a separate
 repository containing any of it, and that is deliberate.
