@@ -48,3 +48,32 @@ until an endpoint ships.
 - EoSim `eosim/platforms/nxp-frdm-imxrt1186/platform.yml` -- the board def.
 - EoSim `eosim/platforms/bluemag-pi/platform.yml` -- the board def.
 - `docs/subghz-three-way-plan.md` -- the wireless lane (complementary, not competing).
+
+## Hardware anchor: i.MX RT1186 TSN switch profile
+
+The FRDM-IMXRT1186 is not just a TSN *endpoint* board — the i.MX RT1186
+carries **dual Gigabit Ethernet with TSN switching** in silicon, plus two
+Fast Ethernet ports for EtherCAT/TSN. That makes it the bridging-model
+reference for the lane, not only the endpoint reference.
+
+**Bridging model.** The on-chip TSN switch sits between the two GbE MACs:
+time-aware shaping (802.1Qbv) and time sync (802.1AS) apply at the switch
+ports, so scheduled traffic keeps its latency budget *across* the bridge,
+not just on the wire. The two Fast Ethernet ports hang off the same
+switching fabric for the EtherCAT/TSN segment — one board can bridge a
+TSN backbone to an EtherCAT cell.
+
+**eNet surface mapping.**
+
+| eNet surface | RT1186 mapping | Lane phase |
+|---|---|---|
+| TSN endpoint (802.1AS, 802.1Qbv Tx) | Either GbE MAC as endpoint | Now — the lane's day-one scope |
+| TSN bridge/switch | On-chip TSN switch, dual GbE | Later — explicitly out of scope until an endpoint ships |
+| EtherCAT master | Fast Ethernet ports | Planned, same board |
+
+**Trust note (per the eSec posture).** A bridge is a privileged position:
+it sees every frame. The bridge path boots fail-closed — the switch
+configuration is part of the measured boot chain (eBoot #162 envelope
+thinking applied to network config), and a bridge that cannot attest its
+config does not forward. An unattested switch is a wiretap with a
+datasheet.
