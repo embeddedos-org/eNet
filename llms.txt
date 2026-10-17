@@ -1,0 +1,30 @@
+# eNet
+
+> llms.txt for the eNet repository (embeddedos-org/eNet).
+> Status: networking for EmbeddedOS (TCP/IP, UDP, DHCP, DNS,
+> MQTT, CoAP). The implementation currently lives in `eos`
+> (`net/`); this repository is the component's design record —
+> protocol hardening, bridge evaluations and study notes.
+> Whether code moves here is a merge/split decision for Aswin.
+
+eNet is the networking component of the EmbeddedOS ecosystem.
+Its docs are the org's protocol-security record: DNS and MQTT
+hardening requirements with test vectors, MCP device-bridge
+evaluations and trial plans, and radio/fieldbus studies.
+
+## Docs
+
+- [DNS resolver hardening — malformed-query requirements and test vectors](docs/dns-hardening.md)
+- [MQTT broker hardening — spec and test vectors](docs/mqtt-broker-hardening.md)
+- [Device bridges: the agent-fabric hardware lane for eNet](docs/device-bridges.md)
+- [MCP bridge evaluation — mcp2mqtt, mcp2tcp, modbus-mcp](docs/mcp-bridge-evaluation.md)
+- [MCP bridge trial plan — mcp2mqtt first, mcp2tcp bench-only](docs/mcp-bridge-trial-plan.md)
+- [LoRaWAN study — native backend pattern + hardware-bridge pairing](docs/lorawan-study.md)
+- [Matter / Thread landscape note (KB seed)](docs/matter-thread-note.md)
+- [Sub-GHz three-way plan](docs/subghz-three-way-plan.md)
+- [The deterministic-comms lane: TSN + EtherCAT](docs/tsn-ethercat-lane.md)
+
+## Machine-readable
+
+- [llms.txt](llms.txt) — this file
+- [llms-full.txt](llms-full.txt) — the docs above concatenated as one document
