@@ -50,6 +50,11 @@ answer all five is not trialled.
   (CWE-290) applies to bridges exactly as to gateways: a bridge
   that lets an unauthenticated caller reach device commands is
   an open channel to physical equipment.
+- **No unauthenticated fallback.** Every failure path — rejected
+  or expired credential, broker reconnect, bridge restart,
+  configuration reload — fails closed: no anonymous session, no
+  default credential, no default-permissive topic/endpoint set.
+  A bridge that cannot authenticate does not bridge.
 - **The agent never holds credentials.** The bridge brokers
   credentials at call time from its own protected store (the
   evaluation's broker rule); the agent side of the conversation
@@ -74,7 +79,14 @@ Per bridge, all of:
    caller.
 3. An out-of-allowlist request is refused by the bridge's
    configuration, with the refusal visible in the bridge's log.
-4. An unauthenticated request is refused.
+4. Every unauthenticated shape is refused, and the trial report
+   records each one individually: (i) no credential; (ii) a wrong
+   credential; (iii) a fabricated `Authorization` header on an
+   otherwise unauthenticated connection; (iv) a reconnect after a
+   broker restart without re-authentication; (v) an
+   out-of-allowlist request made while unauthenticated. Each
+   refusal must be visible in the bridge's log (the visibility
+   standard of criterion 3).
 5. Teardown leaves the bench in the state the safety shape
    requires.
 
@@ -83,7 +95,9 @@ Per bridge, all of:
 Each trial ends with a short report in this directory recording,
 per bridge: **adopt**, **defer**, or **reject** — with the reason
 tied to the success criteria above and to the provenance
-checklist. The decision is recorded in this plan's status line
+checklist. An observed unauthenticated fallback on any path is an
+automatic **reject** for that bridge (not defer), because the
+failure is in the bridge's trust shape, not its feature set. The decision is recorded in this plan's status line
 when the report lands. Silence is not adoption: a bridge with no
 report stays untrialled for planning purposes, however well the
 demo went.
