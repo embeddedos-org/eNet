@@ -401,6 +401,38 @@ demo went.
 - [`device-bridges.md`](device-bridges.md) — the hardware-bridge lane both trials belong to.
 - [`mqtt-broker-hardening.md`](mqtt-broker-hardening.md) — the bench broker's requirements for the mcp2mqtt trial.
 
+## Feasibility probe — 2026-10-22: trial not runnable in the daily-loop sandbox
+
+A time-boxed probe (2026-10-22) asked whether the mcp2mqtt
+trial above could execute in the environment the daily loop
+runs in. **Answer: no — for that sandbox, not for the bridge.**
+What the environment lacks, recorded so a trial day is not
+re-probed from scratch:
+
+- **No container runtime:** Docker is unavailable, so neither
+  the broker nor the bridge can be run as the pinned,
+  reproducible containers the provenance checklist requires.
+- **No broker binary:** no `mosquitto` (or any MQTT broker) is
+  installed, so there is no bench broker to harden to
+  `mqtt-broker-hardening.md` — and the trial does not get a
+  weaker broker than production would.
+- **No MQTT client library** is installed for the harness
+  side, and installing unpinned tooling to force a "yes" was
+  ruled out of bounds — a trial run on unpinned components
+  would not evidence the pinned candidate this plan trials.
+
+**What a trial day needs (provisioning ask):** an environment
+with (1) a container runtime or a natively installed broker
+binary, (2) the bench broker provisioned at the hardening
+standard in `mqtt-broker-hardening.md`, (3) an MQTT client
+library for the harness, and (4) the mcp2mqtt candidate itself
+at a pinned source commit per the provenance checklist. With
+those four in place the trial above runs as written,
+including criterion 4's five-case negative set. Until then
+the mcp2mqtt trial is **deferred by environment, not by
+evidence about the bridge** — no adopt/defer/reject decision
+about mcp2mqtt itself is taken or implied by this entry.
+
 # === docs/lorawan-study.md ===
 
 # LoRaWAN study — native backend pattern + hardware-bridge pairing
