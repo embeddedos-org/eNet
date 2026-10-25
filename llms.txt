@@ -23,6 +23,7 @@ evaluations and trial plans, and radio/fieldbus studies.
 - [Matter / Thread landscape note (KB seed)](docs/matter-thread-note.md)
 - [Sub-GHz three-way plan](docs/subghz-three-way-plan.md)
 - [The deterministic-comms lane: TSN + EtherCAT](docs/tsn-ethercat-lane.md)
+- [Home-systems plan — protocols and platforms, sequenced](docs/home-systems-plan.md)
 
 ## Machine-readable
 
