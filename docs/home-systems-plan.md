@@ -1,6 +1,8 @@
 # Home-systems plan — protocols and platforms, sequenced
 
 Status: scoping doc for the home-systems track (tracker: eNet#7).
+
+Target lock 2026-10-30: Matter 1.6.1 (CSA Core Specification document 23-27349, accepted by the CSA Board 2026-09-16); Thread 1.4 is the border-router target. These are TARGETS for the sequence in §2, not shipped stacks: the org has no Matter stack, no Thread stack, and no Alexa endpoint today.
 Date: 2026-10-24. This plan turns the track's two planning notes
 and one study into a sequenced programme. It commits the org to
 an order of work, not to a stack: where a choice is still open,
@@ -67,7 +69,7 @@ once.** Each step is independently shippable and testable:
 3. **Simulated border router in EoSim** — Thread meshes need a
    border router to reach IP networks; EoSim simulates one
    before hardware exists, so steps 4–5 can be developed
-   against it.
+   against it. The simulated border router targets Thread 1.4. Thread 1.4 is the target version; any certification-cutoff claim is out of scope for this lock until verified against a Thread Group certification notice.
 4. **PASE/CASE via eSec** — session establishment, plus the
    Device Attestation Certificate (DAC) chain commissioning
    requires. This is eSec's domain (key provisioning,
@@ -81,7 +83,7 @@ options later (first-party, Connectivity Standards Alliance,
 Matter 1.6 announcement): as of Matter 1.6, **NFC is an
 additional commissioning bearer alongside BLE**. It does not
 change the BLE-first sequence above; it is a future bearer
-option for step 1. The detailed commissioning step sequence
+option for step 1. The plan's target is now Matter 1.6.1 (see target lock above). 1.6.1 does not change §2's five prerequisites and does not change the BLE-first sequence; NFC remains a future bearer option, not a reason to delay BLE-first. The detailed commissioning step sequence
 (PASE → attestation → NOC → CASE) is **not** specified in this
 plan: it was not verified against a first-party CSA source at
 writing time, and the landscape note's five prerequisites are
