@@ -18,10 +18,10 @@ and controlling its own device family.
 
 Pipeline position: smart-home-iot moves selected → specified on
 this landing. The gap-map is the NEXT pipeline stage and is NOT
-claimed by this spec — §9 is a gap-map pointer, not a completed
+claimed by this spec — §8 is a gap-map pointer, not a completed
 gap-map. Self-check status: selected + specified, not walkable
 until the EoSim radio simulation (H4) lands — the full chain in
-§8 cannot be walked even in sim before then.
+§7 cannot be walked even in sim before then.
 
 ## 1. Hardware (datasheet facts only)
 
@@ -38,7 +38,7 @@ Cast (datasheet, Product Family rows):
 | eThermostat | Wi-Fi, BLE | Thermostat end device |
 | eDoorbell | Wi-Fi 6, BLE | Video doorbell end device |
 | eCamera-Home | Wi-Fi 6 | Indoor camera end device |
-| eSpeaker-AI | Wi-Fi 6, BLE | Voice front end (see §10) |
+| eSpeaker-AI | Wi-Fi 6, BLE | Voice front end (see §9) |
 
 No hardware fact beyond the datasheet is asserted in this spec;
 anything not in the datasheet is marked "to be specified" rather
