@@ -15,7 +15,7 @@ ecosystems (Apple Home, Google Home, Alexa, SmartThings).
 
 | Layer | Technology | eNet relevance |
 |---|---|---|
-| Radio | 802.15.4 (Thread), Wi-Fi, Ethernet | Link technologies eNet already claims |
+| Radio | 802.15.4 (Thread), Wi-Fi, Ethernet | Link technologies eNet claims; BLE is claimed, not shipped (see audit note below) |
 | Mesh | Thread 1.3/1.4 | Needs a Thread stack — OpenThread is the reference |
 | Commissioning | BLE (Matter commissioning) | Every Matter device commissions over BLE first |
 | Application | Matter (application clusters, data model) | Needs the Matter SDK or a subset |
@@ -38,8 +38,17 @@ without both a BLE story and a Thread story.
 ## What eNet's commissioning story would need
 
 1. **BLE commissioning bearer** — Matter commissioning happens over BLE
-   (GATT). eNet's BLE link layer must support the commissioning window
-   (advertising the discriminator, GATT service for PASE).
+   (GATT). Status, audited 2026-11-08 (SH1, `docs/ble-commissioning-audit.md`):
+   NOT MET. The BLE link layer lives in eos, not eNet, and eos has no working
+   BLE link layer: `hal/include/eos/hal_extended.h:199-221` declares the BLE API
+   with no GATT service/characteristic API, and the only implementation,
+   `hal/src/hal_extended_stubs.c:267-285`, returns -1 for every BLE call. The
+   ble-sensor example therefore cannot demonstrate a working bearer. Until eos
+   ships a real BLE backend plus a GATT API, the commissioning window
+   (advertising the discriminator, GATT service for PASE) cannot be carried by
+   the eos stack. H4 decision (same audit): SIMULATE — the EoSim border-router
+   sim models the bearer at protocol level, decoupled from eos BLE; porting the
+   eos BLE stack is a separate, larger prerequisite H4 does not wait on.
 2. **Thread stack** — OpenThread port for at least one 15.4-capable target
    (ESP32-H2 is the natural first target). This is the biggest lift.
 3. **Border router story** — Thread meshes need a border router to reach IP
@@ -53,7 +62,7 @@ without both a BLE story and a Thread story.
 
 ## Suggested sequencing (if pursued)
 
-BLE link → OpenThread port (H2) → simulated border router in EoSim →
+Simulated commissioning bearer in EoSim (H4, decoupled from eos BLE) → real BLE link + GATT API in eos (separate prerequisite, not H4-gating) → OpenThread port (H2) → simulated border router in EoSim →
 PASE/CASE via eSec → minimal Matter application (on/off light) →
 certification pre-test. Each step is independently shippable and testable;
 do not attempt the full stack at once.
