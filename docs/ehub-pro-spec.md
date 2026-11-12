@@ -10,7 +10,12 @@ product_datasheet.md`, v1.0, 2026-06-03, Design Phase), cited —
 not duplicated — below. Target lock: Matter 1.6.1 / Thread 1.4
 (eNet home-systems plan, target lock 2026-10-30; CSA Core
 Specification document 23-27349, accepted by the CSA Board
-2026-09-16).
+2026-09-16). Pin refresh 2026-11-11 (SH3): Thread 1.4
+certification requirement — the Thread Group's
+border-router-certification-only rule has been in force since
+Jan 1, 2026 (deadline passed); Matter 1.6.1 certification lag
+— no ledger entry states 1.6.1 yet, newest certified on the
+ledger is 1.6 (research brief 2026-11-11 §4/§6).
 
 Use case, in one line: eHub-Pro as the household's Matter
 controller + Thread border router + Zigbee bridge, commissioning
@@ -70,8 +75,8 @@ is taken by this spec.
 
 | Protocol | Version / bearer | Status |
 |---|---|---|
-| Matter | 1.6.1 | target |
-| Thread | 1.4 (border router) | target |
+| Matter | 1.6.1 | target (certification lag: no ledger entry states 1.6.1 yet; newest certified is 1.6) |
+| Thread | 1.4 (border router) | target (BR-certification-only rule in force since Jan 1, 2026) |
 | Zigbee | 3.0 | datasheet fact |
 | Z-Wave | 700 | datasheet fact |
 | BLE | 5.3 | datasheet fact; BLE commissioning bearer FIRST per plan §2 step 1 (see §5 caveat) |
@@ -110,11 +115,15 @@ plan-writing time; it is the plan's sequence, not a quoted CSA
 sequence.
 
 BLE caveat (mandatory): eos has a BLE example
-(`examples/ble-sensor/` in eos), but whether a GATT PASE
-service exists is UNVERIFIED and is plan §7 Slice 1's audit
-question. This spec says neither "BLE exists" as a
-commissioning bearer nor "BLE is missing" — the audit answers
-it.
+(`examples/ble-sensor/` in eos), but the SH1 audit
+(`docs/ble-commissioning-audit.md`; eNet #9 merged 2026-11-09)
+has answered the audit question: eos BLE is declarations-only
+— the API in `hal/include/eos/hal_extended.h:199-221` has no
+GATT service/characteristic API and the only implementation
+returns -1 for every BLE call. No GATT PASE bearer exists, and
+real-hardware commissioning is blocked until eos ships a real
+BLE backend plus a GATT API (and an nrf52 BSP). This spec
+claims no BLE PASE bearer.
 
 DAC provisioning flow — requirements only: eSec co-design
 (key provisioning + certificate storage, per plan §2 step 4).
@@ -162,7 +171,7 @@ established in the research brief and this spec:
 | MQTT client | Codec core + Slice 2 state machine (eos #199) | Slice 3+; cloud chain (gap-map stage to complete) | eos |
 | DAC / attestation | Requirements only (§5) | Provisioning + storage design (gap-map stage to complete) | eSec + eNet |
 | Radio simulation | Nothing shipped | Thread BR + commissioning sim H4 (gap-map stage to complete) | EoSim |
-| BLE PASE bearer | Example exists; GATT PASE service UNVERIFIED | Slice 1 audit (gap-map stage to complete) | eos / eNet |
+| BLE PASE bearer | Audit answered (SH1, eNet #9): declarations-only, no GATT | Real BLE backend + GATT API + nrf52 BSP (gap-map stage to complete) | eos / eNet |
 | Hub app | Queue item only | App (gap-map stage to complete) | eApps |
 
 ## 9. Voice pointer (H6, scoping only — one section)
@@ -173,9 +182,15 @@ Smart Home Skill cloud endpoint (a separate, authenticated
 surface; a product and operations commitment, not a protocol
 task). No eVera voice capability is claimed here (the voice
 service source has not been read for this spec); no Alexa
-endpoint is proposed here. Full H6 scoping (local-voice
-command path, capability-scoped per eSec Controls 7–9) is a
-later slice that MUST read eVera's voice service source first.
+endpoint is proposed here.
+
+H6 voice-split scoping (SH3, 2026-11-11; research brief §6):
+the Matter-local talk-back path is Home Assistant 2026.11
+two-way audio (Labs) — a hub-local voice path that needs no
+cloud endpoint — vs the Alexa Skill cloud-endpoint path. Full
+H6 scoping (local-voice command path, capability-scoped per
+eSec Controls 7–9) is a later slice that MUST read eVera's
+voice service source first.
 
 ## 10. Must NOT be claimed (checklist, part of this spec)
 
@@ -184,9 +199,9 @@ shipments. This spec claims NONE of the following: a Matter
 stack; a Thread stack; a Zigbee stack (beyond the datasheet
 row + hub/coordinator first mode); a Z-Wave stack; an Alexa
 endpoint; any certification (Matter, Thread, or otherwise);
-any Thread 1.4 certification-cutoff date; any Matter 1.6.1
-Groupcast/Chime deltas; any BLE PASE bearer existence claim;
+any Matter 1.6.1 Groupcast/Chime deltas; any BLE PASE bearer existence claim;
 any "supports Matter/Thread" shipped language; any change to
 the site's smart-home-iot entry (it stays at `design()`
 maturity until a bundle verifies — program step 7, not this
 spec).
+
