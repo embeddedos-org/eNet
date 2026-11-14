@@ -174,23 +174,38 @@ established in the research brief and this spec:
 | BLE PASE bearer | Audit answered (SH1, eNet #9): declarations-only, no GATT | Real BLE backend + GATT API + nrf52 BSP (gap-map stage to complete) | eos / eNet |
 | Hub app | Queue item only | App (gap-map stage to complete) | eApps |
 
-## 9. Voice pointer (H6, scoping only — one section)
+## 9. Voice pointer (H6, scoping done 2026-11-13 — one section)
 
-The plan §3.1 distinction only: Matter-local control (no
-cloud endpoint, nothing for the org to operate) vs an Alexa
-Smart Home Skill cloud endpoint (a separate, authenticated
-surface; a product and operations commitment, not a protocol
-task). No eVera voice capability is claimed here (the voice
-service source has not been read for this spec); no Alexa
-endpoint is proposed here.
+The plan §3.1 distinction, now recorded as the H6 scoping
+outcome: Matter-local control (no cloud endpoint, nothing for
+the org to operate) vs an Alexa Smart Home Skill cloud endpoint
+(a separate, authenticated surface; a product and operations
+commitment, not a protocol task). No Alexa endpoint is proposed
+here.
 
-H6 voice-split scoping (SH3, 2026-11-11; research brief §6):
-the Matter-local talk-back path is Home Assistant 2026.11
-two-way audio (Labs) — a hub-local voice path that needs no
-cloud endpoint — vs the Alexa Skill cloud-endpoint path. Full
-H6 scoping (local-voice command path, capability-scoped per
-eSec Controls 7–9) is a later slice that MUST read eVera's
-voice service source first.
+H6 voice-split scoping (SH3, 2026-11-11; research brief §6;
+scoped 2026-11-13 in eVera `docs/hub-voice-split-scoping.md`,
+eVera #87 / PR #86): eVera's voice service source HAS now been
+read — local pipeline (webrtcvad VAD, local faster-whisper STT,
+"hey vera" wake word by transcription + fuzzy match, session
+state machine, local pyttsx3 TTS with optional cloud edge-tts;
+mobile push-to-talk `voice.ts`). That local pipeline is the
+candidate Matter-local voice command path; the intent →
+Matter-cluster mapping it needs does not exist yet, and any
+command it issues must be capability-scoped per eSec Controls
+7–9. The Alexa cloud-endpoint path is explicitly NOT proposed.
+
+Home Assistant 2026.11 correction (drift fixed 2026-11-13):
+two-way audio SHIPPED in 2026.11 (released 2026-11-04,
+first-party release notes,
+`home-assistant.io/blog/2026/11/04/release-202611/`) as a Labs
+preview — enable in Settings > System > Labs — not "(Labs)"
+as an unshipped label. Scope limit, from the same release
+notes: it is camera/doorbell talk-back (a talk button on a live
+stream), NOT a voice-command path, and it covers Matter cameras
+and Reolink cameras over RTSP only, over HTTPS only. It is
+evidence a hub-local voice path can exist without a cloud
+endpoint; it is not the Matter-local voice command path.
 
 ## 10. Must NOT be claimed (checklist, part of this spec)
 
@@ -204,4 +219,5 @@ any "supports Matter/Thread" shipped language; any change to
 the site's smart-home-iot entry (it stays at `design()`
 maturity until a bundle verifies — program step 7, not this
 spec).
+
 
