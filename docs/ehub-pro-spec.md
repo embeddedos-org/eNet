@@ -17,6 +17,8 @@ Jan 1, 2026 (deadline passed); Matter 1.6.1 certification lag
 — no ledger entry states 1.6.1 yet, newest certified on the
 ledger is 1.6 (research brief 2026-11-11 §4/§6).
 
+Pin refresh 2026-11-21 (SH7): Espressif ESP32-C6 pinned as the certified platform for the eHub-Pro hub radio — the Thread border router + Zigbee bridge bearer (see §8.2). This pin names the radio platform only; the hub SoC stays the NXP i.MX 8M Mini (§1) and the Thread border router + Zigbee bridge roles (§2) are unchanged.
+
 Use case, in one line: eHub-Pro as the household's Matter
 controller + Thread border router + Zigbee bridge, commissioning
 and controlling its own device family.
@@ -186,7 +188,7 @@ hardware/real piece does not.
 | DAC / attestation | Requirements only (§5). eSec owns attestation, key management, device identity and secure storage as scope (eSec README); eos `services/crypto/` has AES + SHA-256/512 passing NIST vectors, RSA/ECC verification still stubs | Provisioning + certificate storage design — the eSec CY1 co-design, still pending (EoSim `docs/thread-border-router.md`: "Device identity provisioning is the eSec CY1 co-design, still pending") | eSec + eNet | BLOCKED on CY1 co-design |
 | Radio simulation | H4 LANDED 2026-11-10 (EoSim `docs/thread-border-router.md`; `ThreadBorderRouter` + `MatterCommissioning` in `eosim/engine/native/peripherals/thread.py`; product simulator `thread_border_router` with scenarios `commission_device`, `mesh_map`, `commission_timeout`; `tests/unit/test_thread_border_router.py`) | Real 802.15.4 radio (explicitly not simulated); PASE cryptography (the passcode comparison is a sim placeholder); DAC behavior; NFC as a second commissioning bearer (documented, not implemented) | EoSim | PARTIAL — sim exists, hardware path still open |
 | BLE PASE bearer | Audit answered (SH1, eNet #9, [ble-commissioning-audit.md](ble-commissioning-audit.md)): declarations-only, no GATT API; H4 SIMULATE decision decouples the sim from eos BLE | Real BLE backend + GATT API + nrf52 BSP in eos (prerequisite 1, still unmet) | eos / eNet | BLOCKED on prerequisite 1 |
-| Hub radio hardware | Datasheet protocol rows only (Matter 1.6.1 target, Zigbee 3.0, Z-Wave 700, BLE 5.3, Wi-Fi 6, Thread 1.4 target); hub connectivity lists GbE + USB only | No named 802.15.4 / Zigbee / Z-Wave radio silicon or module on the hub — which radio carries Thread/Zigbee is unspecified | eCAD + eNet | UNKNOWN — blocker: eCAD datasheet radio-module line (or a USB-radio decision) |
+| Hub radio hardware | Datasheet protocol rows only (Matter 1.6.1 target, Zigbee 3.0, Z-Wave 700, BLE 5.3, Wi-Fi 6, Thread 1.4 target); hub connectivity lists GbE + USB only. **SH7 pin (2026-11-21): Espressif ESP32-C6 is the certified platform for the hub radio** — the Thread border router + Zigbee bridge bearer (see §8.2) | Radio module/integration on the hub + certification evidence for the ESP32-C6 in this role — the platform is pinned, the module and its certification record are still to be specified | eCAD + eNet | OPEN — platform pinned 2026-11-21 (SH7); was UNKNOWN (blocker: eCAD datasheet radio-module line or a USB-radio decision) |
 | Zigbee bridge | Hub/coordinator first mode chosen (§2); the bridge pattern exists for other protocols ([device-bridges.md](device-bridges.md): mcp2serial, mcp2mqtt, modbus) | No Zigbee coordinator/bridge implementation; native stack explicitly undecided; closing evidence (a named deployment the hub story cannot serve) does not exist | eNet | OPEN |
 | Z-Wave | Datasheet row + [home-systems-plan.md](home-systems-plan.md) §3.3 research gap | Study in the shape of the LoRaWAN study (licensing + silicon + stack read from first-party sources); sequenced after plan §2 steps 1–2 | eNet | UNKNOWN — research gap |
 | Hub app | Queue item only (§4, §7); no tracker found (eApps title search "hub": 0 hits), no code | The app itself | eApps | OPEN — blocked on the Matter lane (nothing to show yet) |
@@ -215,6 +217,13 @@ Their Matter device types and clusters stay UNPINNED. Blocker:
 read the Matter 1.6.1 Device Library for camera/doorbell device
 types before pinning anything for the doorbell or the camera. Do
 not map them to Door Lock or any other device type by analogy.
+
+### 8.2 Certified platform pin — Espressif ESP32-C6 (SH7, 2026-11-21)
+
+- **Pin:** Espressif ESP32-C6 is the certified platform for the eHub-Pro hub radio — the silicon carrying the Thread border router (§2, Thread 1.4) and the Zigbee bridge (§2, hub/coordinator first mode).
+- **Scope of the pin:** the radio platform only. It does not change the hub SoC (NXP i.MX 8M Mini, §1), the Matter 1.6.1 / Thread 1.4 target lock (§3), or the Thread border router + Zigbee bridge roles (§2).
+- **What this does not claim:** no certification is claimed by this pin — no Matter or Thread certification record for the ESP32-C6 in this hub role is cited here, and none is asserted. The module/integration and its certification evidence are still to be specified (see the Hub radio hardware row above).
+- **No conflict:** §8 named no other certified platform before this pin — the Hub radio hardware row previously recorded the radio as unspecified (UNKNOWN). Nothing was replaced.
 
 ## 9. Voice pointer (H6, scoping done 2026-11-13 — one section)
 
