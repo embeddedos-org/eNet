@@ -224,6 +224,7 @@ not map them to Door Lock or any other device type by analogy.
 - **Scope of the pin:** the radio platform only. It does not change the hub SoC (NXP i.MX 8M Mini, §1), the Matter 1.6.1 / Thread 1.4 target lock (§3), or the Thread border router + Zigbee bridge roles (§2).
 - **What this does not claim:** no certification is claimed by this pin — no Matter or Thread certification record for the ESP32-C6 in this hub role is cited here, and none is asserted. The module/integration and its certification evidence are still to be specified (see the Hub radio hardware row above).
 - **No conflict:** §8 named no other certified platform before this pin — the Hub radio hardware row previously recorded the radio as unspecified (UNKNOWN). Nothing was replaced.
+- **Bring-up contract (SH9, 2026-11-23):** the hub-radio bring-up contract for this pin is [ehub-pro-c6-radio-bringup.md](ehub-pro-c6-radio-bringup.md) — C6 as 802.15.4 RCP to the i.MX 8M Mini host, esp-thread-br as reference, Thread 1.4 + Matter 1.6.1. On its merge, smart-home-iot moves gap-mapped → building.
 
 ## 9. Voice pointer (H6, scoping done 2026-11-13 — one section)
 
